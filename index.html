@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validate System Algonova</title>
+    <style>
+        /* Import Font dari Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        /* === CSS Variables (untuk tema) === */
+        :root {
+            --bg-color: #1a1a2e;
+            --card-color: #16213e;
+            --primary-color: #0f3460;
+            --accent-color: #e94560;
+            --font-color: #e0e0e0;
+            --input-bg-color: #2c3e50;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+        }
+
+        /* === Global Styles === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--font-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* === Container Utama === */
+        .container {
+            background-color: var(--card-color);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--font-color);
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        /* === Form & Input Fields === */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--font-color);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            background-color: var(--input-bg-color);
+            color: var(--font-color);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .input-field:invalid {
+            border-color: var(--error-color);
+        }
+
+        /* === Tombol Submit === */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #d43d51;
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* === Area Loading === */
+        .loading-area {
+            margin-top: 25px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loading-text {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--font-color);
+        }
+
+        /* === Area Hasil === */
+        .result-area {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        .result-area.success {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .result-area.error {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+
+        /* === Responsif untuk mobile === */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            h1 {
+                font-size: 1.3rem;
+            }
+            .input-field {
+                font-size: 0.95rem;
+                padding: 10px 12px;
+            }
+            .submit-btn {
+                font-size: 1rem;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ALGONOVA SCHOLARSHIP SYSTEM</h1>
+        <h2>Validate System</h2>
+        <form id="validation-form" novalidate>
+            <div class="form-group">
+                <label for="child-name">Name Of Child</label>
+                <input 
+                    type="text" 
+                    id="child-name" 
+                    class="input-field" 
+                    placeholder="Contoh: Budi" 
+                    required
+                    aria-required="true"
+                    aria-label="Nama Anak"
+                >
+            </div>
+            <div class="form-group">
+                <label for="tutor-name">Name Of Tutor</label>
+                <input 
+                    type="text" 
+                    id="tutor-name" 
+                    class="input-field" 
+                    placeholder="Contoh: Siti" 
+                    required
+                    aria-required="true"
+                    aria-label="Nama Tutor"
+                >
+            </div>
+            <div class="form-group">
+                <label for="voucher-code">Voucher Code</label>
+                <input 
+                    type="text" 
+                    id="voucher-code" 
+                    class="input-field" 
+                    placeholder="" 
+                    required
+                    aria-required="true"
+                    aria-label="Kode Voucher"
+                >
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-button" aria-label="Cek Status Voucher">Check Status</button>
+        </form>
+
+        <!-- Area Loading -->
+        <div class="loading-area" id="loading-area" aria-live="polite" aria-busy="true">
+            <div class="spinner" role="status" aria-label="Loading"></div>
+            <p id="loading-text">Start The Process...</p>
+        </div>
+
+        <!-- Area Hasil -->
+        <div class="result-area" id="result-area" role="alert" aria-live="assertive"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ambil semua elemen yang dibutuhkan dari DOM
+            const form = document.getElementById('validation-form');
+            const childNameInput = document.getElementById('child-name');
+            const tutorNameInput = document.getElementById('tutor-name');
+            const voucherCodeInput = document.getElementById('voucher-code');
+            const submitButton = document.getElementById('submit-button');
+            const loadingArea = document.getElementById('loading-area');
+            const loadingText = document.getElementById('loading-text');
+            const resultArea = document.getElementById('result-area');
+
+            // Fungsi untuk menampilkan pesan error di bawah input
+            function showError(input, message) {
+                let errorElement = input.parentElement.querySelector('.error-message');
+                if (!errorElement) {
+                    errorElement = document.createElement('span');
+                    errorElement.className = 'error-message';
+                    errorElement.style.color = 'var(--error-color)';
+                    errorElement.style.fontSize = '0.85rem';
+                    errorElement.style.display = 'block';
+                    errorElement.style.marginTop = '5px';
+                    input.parentElement.appendChild(errorElement);
+                }
+                errorElement.textContent = message;
+                input.style.borderColor = 'var(--error-color)';
+            }
+
+            // Fungsi untuk menghapus error
+            function clearError(input) {
+                const errorElement = input.parentElement.querySelector('.error-message');
+                if (errorElement) {
+                    errorElement.remove();
+                }
+                input.style.borderColor = 'transparent';
+            }
+
+            // Validasi real-time saat input berubah
+            [childNameInput, tutorNameInput, voucherCodeInput].forEach(input => {
+                input.addEventListener('input', () => {
+                    if (input.validity.valid) {
+                        clearError(input);
+                    } else if (input.value.trim() === '') {
+                        showError(input, 'Field must be filled.');
+                    }
+                });
+            });
+
+            // Fungsi escape HTML untuk mencegah XSS
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Tambahkan event listener saat form di-submit
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                // Reset error sebelumnya
+                [childNameInput, tutorNameInput, voucherCodeInput].forEach(clearError);
+
+                // Validasi manual
+                let isValid = true;
+
+                if (!childNameInput.value.trim()) {
+                    showError(childNameInput, 'Name of child (Mandatory).');
+                    isValid = false;
+                }
+                if (!tutorNameInput.value.trim()) {
+                    showError(tutorNameInput, 'Name of Tutor (Mandatory)');
+                    isValid = false;
+                }
+                if (!voucherCodeInput.value.trim()) {
+                    showError(voucherCodeInput, 'Voucher Of Code (Mandatory)');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    return;
+                }
+
+                // Mulai proses loading
+                resultArea.style.display = 'none';
+                loadingArea.style.display = 'flex';
+                submitButton.disabled = true;
+                submitButton.textContent = 'Process...';
+
+                // Gimmick loading text
+                const loadingMessages = [
+                    "Calling The Server...",
+                    "Checking Database...",
+                    "Validating Voucher...",
+                    "Prepare Results..."
+                ];
+                let messageIndex = 0;
+                loadingText.textContent = loadingMessages[messageIndex];
+
+                const messageInterval = setInterval(() => {
+                    messageIndex++;
+                    if (messageIndex < loadingMessages.length) {
+                        loadingText.textContent = loadingMessages[messageIndex];
+                    }
+                }, 1200);
+
+                // Simulasi proses validasi (4.5 detik)
+                const processTimeout = setTimeout(() => {
+                    clearInterval(messageInterval);
+                    loadingArea.style.display = 'none';
+
+                    const voucherCode = voucherCodeInput.value.trim();
+                    const childName = childNameInput.value.trim();
+                    const VALID_CODE = "230923_ALG_MRJ"; // Kode voucher yang valid
+
+                    resultArea.classList.remove('success', 'error');
+
+                    if (voucherCode === VALID_CODE) {
+                        resultArea.innerHTML = `✅ Approved For <strong>${escapeHtml(childName)}</strong>`;
+                        resultArea.classList.add('success');
+                    } else {
+                        resultArea.innerHTML = `❌ Not Approved For - .<strong>${escapeHtml(childName)}</strong>.Please contact the academic teams`;
+                        resultArea.classList.add('error');
+                    }
+
+                    resultArea.style.display = 'block';
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Check Status';
+
+                }, 4500);
+
+                // Batalkan proses sebelumnya jika form disubmit ulang
+                const cancelPreviousSubmit = function(e) {
+                    if (loadingArea.style.display === 'flex') {
+                        e.preventDefault();
+                        clearTimeout(processTimeout);
+                        clearInterval(messageInterval);
+                        loadingArea.style.display = 'none';
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Check Status';
+                        form.removeEventListener('submit', cancelPreviousSubmit);
+                    }
+                };
+
+                form.addEventListener('submit', cancelPreviousSubmit, { once: true });
+
+            });
+        });
+    </script>
+
+</body>
+</html>
