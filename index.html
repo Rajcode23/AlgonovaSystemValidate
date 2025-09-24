@@ -353,12 +353,12 @@
 
                     const voucherCode = voucherCodeInput.value.trim();
                     const childName = childNameInput.value.trim();
-                    const VALID_CODE = "230923_ALG_MRJ","230923_ALG_ARYA","021214_ALG_NILA"; // Kode voucher yang valid
+                   const VALID_CODES = ["230923_ALG_MRJ", "021214_ALG_NILA", "230923_ALG_ARYA"]; // Kode voucher yang valid
 
 
                     resultArea.classList.remove('success', 'error');
 
-                    if (voucherCode === VALID_CODE) {
+                   if (VALID_CODES.includes(voucherCode)) {
                         resultArea.innerHTML = `✅ Approved For <strong>${escapeHtml(childName)}</strong>`;
                         resultArea.classList.add('success');
                     } else {
